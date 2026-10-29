@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Varun Studio</string>
+    <string name="app_tagline">On-device AI coding assistant</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_models">Models</string>
+    <string name="nav_chat">Assistant</string>
+    <string name="nav_repos">Repos</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Common -->
+    <string name="action_cancel">Cancel</string>
+    <string name="action_stop">Stop</string>
+    <string name="action_save">Save</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_close">Close</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_back">Back</string>
+    <string name="action_approve">Approve</string>
+    <string name="action_reject">Reject</string>
+    <string name="action_apply">Apply</string>
+    <string name="action_search">Search</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_send">Send</string>
+    <string name="action_disconnect">Disconnect</string>
+    <string name="action_connect">Connect</string>
+    <string name="action_import">Import</string>
+    <string name="action_download">Download</string>
+    <string name="action_unload">Unload</string>
+    <string name="action_load">Load</string>
+    <string name="action_ok">OK</string>
+    <string name="action_copy">Copy</string>
+    <string name="action_share">Share</string>
+    <string name="state_loading">Loading…</string>
+    <string name="state_working">Working…</string>
+    <string name="state_empty">Nothing here yet</string>
+    <string name="state_offline">Offline</string>
+
+    <!-- Home -->
+    <string name="home_title">Dashboard</string>
+    <string name="home_model_card">Local model</string>
+    <string name="home_no_model">No model loaded</string>
+    <string name="home_no_model_hint">Import a GGUF model to start. Everything runs on this phone.</string>
+    <string name="home_model_ready">Ready</string>
+    <string name="home_memory">Memory</string>
+    <string name="home_storage">Storage</string>
+    <string name="home_device_ram">Device RAM</string>
+    <string name="home_free_ram">Free RAM</string>
+    <string name="home_app_limit">Per-app limit</string>
+    <string name="home_recent_tasks">Recent tasks</string>
+    <string name="home_quick_actions">Quick actions</string>
+    <string name="home_thermal">Thermal status</string>
+    <string name="home_battery">Battery</string>
+
+    <!-- Models -->
+    <string name="models_title">Model manager</string>
+    <string name="models_import">Import GGUF from storage</string>
+    <string name="models_import_hint">Pick a .gguf file already on your phone. Nothing is uploaded.</string>
+    <string name="models_catalog">Suggested models</string>
+    <string name="models_catalog_hint">Downloads need your explicit tap and an internet connection. Files are stored privately in this app.</string>
+    <string name="models_size">Size</string>
+    <string name="models_format">Format</string>
+    <string name="models_quant">Quantization</string>
+    <string name="models_estimated_ram">Estimated RAM</string>
+    <string name="models_context">Context</string>
+    <string name="models_threads">Threads</string>
+    <string name="models_status_imported">Imported</string>
+    <string name="models_status_downloading">Downloading</string>
+    <string name="models_status_failed">Failed</string>
+    <string name="models_status_ready">Ready to load</string>
+    <string name="models_loaded_now">Loaded now</string>
+    <string name="models_fit_warning">This model may not fit in available RAM on this device.</string>
+    <string name="models_fit_ok">Should fit comfortably on this device.</string>
+    <string name="models_fit_tight">Tight fit — close other apps first.</string>
+    <string name="models_consent_title">Download this model?</string>
+    <string name="models_consent_body">%1$s will be downloaded to this phone (%2$s). This uses your data connection and needs storage space. The model then runs entirely offline.</string>
+    <string name="models_delete_title">Delete this model?</string>
+    <string name="models_delete_body">The GGUF file and its record will be removed from this phone. This cannot be undone.</string>
+    <string name="models_unload_confirm">Unload the model to free RAM?</string>
+    <string name="models_speed">Speed</string>
+    <string name="models_tokens_per_sec">%1$.1f tok/s</string>
+
+    <!-- Chat -->
+    <string name="chat_title">Coding assistant</string>
+    <string name="chat_input_hint">Ask about your code…</string>
+    <string name="chat_generating">Generating on device…</string>
+    <string name="chat_stop_generating">Stop</string>
+    <string name="chat_no_model">Load a model first</string>
+    <string name="chat_no_model_body">Open Models, import or download a GGUF, then load it. Inference never leaves this phone.</string>
+    <string name="chat_new_session">New conversation</string>
+    <string name="chat_attach_files">Attach files</string>
+    <string name="chat_attached">Attached: %1$d files</string>
+    <string name="chat_tokens_used">Context used: %1$d / %2$d tokens</string>
+    <string name="chat_trim_history">Trim history</string>
+    <string name="chat_task_explain">Explain code</string>
+    <string name="chat_task_bugs">Find bugs</string>
+    <string name="chat_task_security">Security review</string>
+    <string name="chat_task_fix">Suggest a fix</string>
+    <string name="chat_task_generate">Generate code</string>
+    <string name="chat_task_refactor">Refactor</string>
+    <string name="chat_task_tests">Write unit tests</string>
+    <string name="chat_task_deps">Review dependencies</string>
+    <string name="chat_task_build_error">Explain build error</string>
+    <string name="chat_task_audit">Repository audit</string>
+    <string name="chat_copy_response">Copy response</string>
+
+    <!-- GitHub -->
+    <string name="github_title">GitHub</string>
+    <string name="github_connect_title">Connect your GitHub account</string>
+    <string name="github_connect_body">Paste a fine-grained personal access token. It is encrypted with the Android Keystore and stored only on this phone. GitHub is used for repository access only — never for AI inference.</string>
+    <string name="github_token_label">Personal access token</string>
+    <string name="github_token_hint">github_pat_…</string>
+    <string name="github_scopes_title">Recommended minimum permissions</string>
+    <string name="github_scopes_body">Contents: read/write · Metadata: read · Pull requests: read/write (optional). Do not grant administration, delete, or account scopes.</string>
+    <string name="github_connected_as">Connected as %1$s</string>
+    <string name="github_repos">Repositories</string>
+    <string name="github_private_repo">Private</string>
+    <string name="github_public_repo">Public</string>
+    <string name="github_branches">Branches</string>
+    <string name="github_commits">Commits</string>
+    <string name="github_default_branch">Default branch: %1$s</string>
+    <string name="github_needs_internet">GitHub access requires an internet connection. Your AI model still works offline.</string>
+    <string name="github_invalid_token">That token was rejected by GitHub.</string>
+    <string name="github_import_workspace">Import into local workspace</string>
+    <string name="github_open_file">Open file</string>
+    <string name="github_search_placeholder">Search code, symbols, config values…</string>
+    <string name="github_disconnect_confirm">Disconnect and erase the stored token?</string>
+
+    <!-- Workspace -->
+    <string name="workspace_title">Local workspace</string>
+    <string name="workspace_files">Files</string>
+    <string name="workspace_import_zip">Import repository archive (.zip/.tar.gz)</string>
+    <string name="workspace_empty">No workspace yet. Import from GitHub or an archive.</string>
+    <string name="workspace_too_large">File is larger than the configured limit (%1$s).</string>
+    <string name="workspace_selected_for_ai">%1$d files selected for analysis</string>
+
+    <!-- Editor -->
+    <string name="editor_title">Editor</string>
+    <string name="editor_unsaved">Unsaved changes</string>
+    <string name="editor_saved">Saved</string>
+    <string name="editor_lines">%1$d lines</string>
+    <string name="editor_read_only">Read-only</string>
+
+    <!-- Diff -->
+    <string name="diff_title">Review changes</string>
+    <string name="diff_original">Original</string>
+    <string name="diff_proposed">Proposed</string>
+    <string name="diff_added">%1$d added</string>
+    <string name="diff_removed">%1$d removed</string>
+    <string name="diff_no_changes">No changes</string>
+    <string name="diff_approve_all">Approve all</string>
+    <string name="diff_reject_all">Reject all</string>
+    <string name="diff_applied">Changes applied. Originals kept as backups.</string>
+    <string name="diff_rejected">Changes rejected. Original files are untouched.</string>
+
+    <!-- Git operations -->
+    <string name="git_create_branch">Create branch</string>
+    <string name="git_branch_name">Branch name</string>
+    <string name="git_commit">Commit</string>
+    <string name="git_commit_message">Commit message</string>
+    <string name="git_push">Push</string>
+    <string name="git_push_confirm">Push %1$d file(s) to %2$s on branch %3$s? This updates GitHub.</string>
+    <string name="git_commit_preview">Commit contents</string>
+    <string name="git_protected">This branch is protected. Varun will not force-push, delete branches, or commit to the default branch without your explicit approval.</string>
+    <string name="git_needs_approval">Explicit approval required</string>
+    <string name="git_success">Pushed successfully</string>
+    <string name="git_failed">Git operation failed</string>
+
+    <!-- Tasks -->
+    <string name="tasks_title">Task queue</string>
+    <string name="tasks_empty">No tasks running</string>
+    <string name="tasks_queued">Queued</string>
+    <string name="tasks_running">Running</string>
+    <string name="tasks_done">Done</string>
+    <string name="tasks_failed">Failed</string>
+    <string name="tasks_cancelled">Cancelled</string>
+    <string name="tasks_cancel_all">Cancel all</string>
+    <string name="tasks_progress">%1$d%%</string>
+
+    <!-- Audit -->
+    <string name="audit_title">Audit reports</string>
+    <string name="audit_empty">No reports yet</string>
+    <string name="audit_generate">Generate report</string>
+    <string name="audit_findings">%1$d findings</string>
+    <string name="audit_severity_high">High</string>
+    <string name="audit_severity_medium">Medium</string>
+    <string name="audit_severity_low">Low</string>
+    <string name="audit_untested">Untested</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_inference">Inference</string>
+    <string name="settings_context_length">Context length</string>
+    <string name="settings_max_tokens">Max new tokens</string>
+    <string name="settings_temperature">Temperature</string>
+    <string name="settings_threads">CPU threads</string>
+    <string name="settings_threads_hint">2–4 is usually best on a phone. More threads can overheat and slow down.</string>
+    <string name="settings_mmap">Memory-map model file</string>
+    <string name="settings_mmap_hint">Uses less RAM for large models. Recommended on.</string>
+    <string name="settings_history">Conversation history</string>
+    <string name="settings_history_hint">Number of earlier messages sent back to the model.</string>
+    <string name="settings_limits">Safety limits</string>
+    <string name="settings_max_file_kb">Max file size for AI context (KB)</string>
+    <string name="settings_max_files">Max files per request</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_system">Follow system</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_lang_system">System default</string>
+    <string name="settings_lang_en">English</string>
+    <string name="settings_lang_ta">தமிழ் (Tamil)</string>
+    <string name="settings_security">Security</string>
+    <string name="settings_security_body">Tokens are encrypted with the Android Keystore. Source code stays in app-private storage. Nothing is sent anywhere except github.com.</string>
+    <string name="settings_erase_all">Erase all local data</string>
+    <string name="settings_erase_confirm">Delete models, workspaces, chats, tokens and settings from this phone?</string>
+    <string name="settings_about">About</string>
+    <string name="settings_runtime">Inference runtime</string>
+    <string name="settings_runtime_value">llama.cpp %1$s (MIT)</string>
+    <string name="settings_version">App version</string>
+    <string name="settings_licenses">Licenses</string>
+    <string name="settings_diagnostics">Diagnostics</string>
+
+    <!-- Errors -->
+    <string name="err_generic">Something went wrong.</string>
+    <string name="err_out_of_memory">Not enough RAM. Try a smaller model or a smaller quantization, close other apps, then retry.</string>
+    <string name="err_model_load_failed">This GGUF could not be loaded. It may be corrupt, incomplete, or use an architecture this runtime does not support.</string>
+    <string name="err_context_full">The selected content is too large for the model context. Deselect some files or raise the context length.</string>
+    <string name="err_no_network">No internet connection.</string>
+    <string name="err_network">Network request failed.</string>
+    <string name="err_unauthorized">GitHub rejected these credentials (401).</string>
+    <string name="err_forbidden">Your token lacks permission for this (403).</string>
+    <string name="err_not_found">Not found (404).</string>
+    <string name="err_rate_limited">GitHub rate limit reached. Try again later.</string>
+    <string name="err_path_traversal">Blocked: that path escapes the workspace.</string>
+    <string name="err_storage_full">Not enough free storage.</string>
+    <string name="err_cancelled">Cancelled.</string>
+
+    <!-- Notifications -->
+    <string name="notif_channel_inference">On-device inference</string>
+    <string name="notif_inference_title">Varun is generating</string>
+    <string name="notif_inference_body">Running locally on this device.</string>
+    <string name="notif_download_title">Downloading model</string>
+</resources>

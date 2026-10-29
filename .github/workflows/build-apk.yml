@@ -1,0 +1,368 @@
+name: Build APK
+
+# ---------------------------------------------------------------------------
+# Varun Studio build pipeline.
+#
+# This workflow is the ONLY way this project is compiled. The author has an
+# Android phone and no computer, so there is no local Android Studio, no local
+# JDK and no local SDK. Everything below runs on GitHub-hosted runners and the
+# resulting APK is published to a GitHub Release that can be opened and
+# installed from the phone's browser.
+#
+# Jobs (the first two run in parallel):
+#   host-tests - compiles the SHIPPING C++ engine for the host and runs a
+#                50-assertion harness against a real (synthetic) GGUF model.
+#                This is an execution test, not a compile check.
+#   android    - installs the SDK/NDK, assembles an installable APK, and runs
+#                the JVM unit tests. Kept in ONE job because the unit-test task
+#                graph shares the SDK/NDK setup; splitting it would either
+#                download the ~1 GB NDK twice or risk a missing-NDK failure.
+#   release    - publishes that APK to a single rolling GitHub Release, so the
+#                phone always has one stable download URL.
+# ---------------------------------------------------------------------------
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+    inputs:
+      skip_host_tests:
+        description: "Skip the native host-test job (saves runner minutes)"
+        type: boolean
+        default: false
+      abis:
+        description: "Comma-separated ABIs to build"
+        type: string
+        default: "arm64-v8a"
+
+# A new push supersedes an in-flight build; private-repo minutes are limited.
+concurrency:
+  group: apk-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write      # required to publish the Release asset
+
+env:
+  # Must match app/build.gradle.kts and app/src/main/cpp/CMakeLists.txt.
+  VARUN_NDK_VERSION: "27.2.12479018"
+  VARUN_CMAKE_VERSION: "3.22.1"
+  VARUN_COMPILE_SDK: "35"
+  VARUN_BUILD_TOOLS: "35.0.0"
+  # llama.cpp b11979 (MIT). Pinned so a build is reproducible.
+  LLAMA_TAG: "bf48103ad164d919fbad6a28359c3f728e4ad942"
+  ABIS: ${{ github.event.inputs.abis || 'arm64-v8a' }}
+  # Fixed artifact name so the release job never has to guess it.
+  APK_ARTIFACT: "varun-apk"
+
+jobs:
+  # =========================================================================
+  # Native engine verification. Runs the real code.
+  # =========================================================================
+  host-tests:
+    name: Native engine host tests
+    if: ${{ github.event.inputs.skip_host_tests != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cmake ninja-build >/dev/null
+          cmake --version | head -1
+          g++ --version | head -1
+
+      - name: Install python deps for the synthetic model
+        run: |
+          python3 -m pip install --quiet gguf numpy \
+            || python3 -m pip install --quiet --break-system-packages gguf numpy
+
+      - name: Cache the host llama.cpp tree
+        uses: actions/cache@v4
+        with:
+          path: build-hosttest/llama.cpp
+          key: llama-host-${{ env.LLAMA_TAG }}-${{ runner.os }}-v1
+          restore-keys: llama-host-${{ env.LLAMA_TAG }}-
+
+      - name: Build llama.cpp for host and run the engine harness
+        run: ./tools/hosttest/run_host_tests.sh
+        env:
+          VARUN_JOBS: "4"
+
+      - name: Summarise
+        if: always()
+        run: |
+          {
+            echo "## Native engine host tests"
+            echo ""
+            echo "Compiled the shipping \`app/src/main/cpp/llama_session.cpp\` with"
+            echo "\`-Wall -Wextra -Werror\` against host llama.cpp \`${LLAMA_TAG:0:12}\`"
+            echo "and executed the assertion harness with a synthetic GGUF model."
+            echo ""
+            echo "See the **Build llama.cpp for host and run the engine harness** log"
+            echo "for the per-check output and the final pass/fail line."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # =========================================================================
+  # The APK and the Kotlin unit tests.
+  # =========================================================================
+  android:
+    name: Build APK + unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Android SDK packages
+        run: |
+          set -euo pipefail
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-$HOME/android-sdk}}"
+          echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
+          SM="$SDK/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SM" ]; then
+            SM="$(find "$SDK" -name sdkmanager -type f 2>/dev/null | head -1)"
+          fi
+          [ -n "$SM" ] || { echo "::error::sdkmanager not found"; exit 1; }
+          echo "Using sdkmanager: $SM"
+          yes | "$SM" --licenses >/dev/null 2>&1 || true
+          "$SM" --install \
+            "platform-tools" \
+            "platforms;android-${VARUN_COMPILE_SDK}" \
+            "build-tools;${VARUN_BUILD_TOOLS}" \
+            "cmake;${VARUN_CMAKE_VERSION}" \
+            "ndk;${VARUN_NDK_VERSION}"
+          echo "Installed:"
+          "$SM" --list_installed 2>/dev/null | grep -Ei "ndk|cmake|platforms;|build-tools" || true
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('**/*.gradle.kts', 'gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+
+      # The debug keystore is cached so consecutive builds sign with the SAME
+      # key. Without this every run would produce a differently-signed APK and
+      # the phone would refuse to update in place, forcing an uninstall (which
+      # wipes downloaded models and local workspaces).
+      - name: Cache the CI debug signing key
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: varun-debug-keystore-v1
+
+      # llama.cpp is fetched and cross-compiled by CMake. Caching the NDK build
+      # tree turns a long native build into a short incremental one.
+      - name: Cache the native build tree
+        uses: actions/cache@v4
+        with:
+          path: app/.cxx
+          key: cxx-${{ env.LLAMA_TAG }}-${{ env.ABIS }}-${{ hashFiles('app/src/main/cpp/**') }}
+          restore-keys: |
+            cxx-${{ env.LLAMA_TAG }}-${{ env.ABIS }}-
+            cxx-${{ env.LLAMA_TAG }}-
+
+      - name: Assemble the debug APK
+        run: |
+          ./gradlew --no-daemon --stacktrace \
+            :app:assembleDebug \
+            -PVARUN_ABIS="${ABIS}" \
+            -PVARUN_NDK_VERSION="${VARUN_NDK_VERSION}" \
+            -PVARUN_CMAKE_VERSION="${VARUN_CMAKE_VERSION}"
+
+      - name: Verify the APK contents
+        run: |
+          set -euo pipefail
+          APK=app/build/outputs/apk/debug/app-debug.apk
+          test -f "$APK" || { echo "::error::APK was not produced"; exit 1; }
+
+          echo "### APK" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- size: $(du -h "$APK" | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- sha256: \`$(sha256sum "$APK" | cut -d' ' -f1)\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Native libraries packaged:" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          unzip -l "$APK" | grep -E "lib/.*\.so" >> "$GITHUB_STEP_SUMMARY" || echo "(none found)" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+          # The native runtime is the whole point: prove it is inside the APK.
+          if ! unzip -l "$APK" | grep -q "lib/arm64-v8a/libvarunllama.so"; then
+            echo "::error::libvarunllama.so for arm64-v8a is missing from the APK"
+            exit 1
+          fi
+          echo "libvarunllama.so present for arm64-v8a"
+
+      - name: Package for release
+        run: |
+          set -euo pipefail
+          VERSION="$(sed -n 's/.*versionName = "\([^"]*\)".*/\1/p' app/build.gradle.kts | head -1)"
+          [ -n "$VERSION" ] || VERSION="0.0.0"
+          ABI="$(echo "${ABIS}" | tr ',' '+')"
+          NAME="Varun-Studio-${VERSION}-${ABI}.apk"
+          mkdir -p dist
+          cp app/build/outputs/apk/debug/app-debug.apk "dist/${NAME}"
+          ( cd dist && sha256sum "${NAME}" > "${NAME}.sha256" )
+          echo "APK_NAME=${NAME}" >> "$GITHUB_ENV"
+          echo "APK_VERSION=${VERSION}" >> "$GITHUB_ENV"
+          ls -la dist/
+
+      - name: Upload APK artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APK_ARTIFACT }}
+          path: |
+            dist/*.apk
+            dist/*.sha256
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Run JVM unit tests
+        run: |
+          ./gradlew --no-daemon --stacktrace :app:testDebugUnitTest
+
+      - name: Summarise unit tests
+        if: always()
+        run: |
+          {
+            echo "## Kotlin unit tests"
+            echo ""
+            if ls app/build/test-results/testDebugUnitTest/*.xml >/dev/null 2>&1; then
+              T=0; F=0; E=0; S=0
+              echo "| Suite | Tests | Failures | Errors | Skipped |"
+              echo "|---|---|---|---|---|"
+              for x in app/build/test-results/testDebugUnitTest/*.xml; do
+                n=$(sed -n 's/.*name="\([^"]*\)".*/\1/p' "$x" | head -1)
+                t=$(sed -n 's/.*tests="\([0-9]*\)".*/\1/p' "$x" | head -1)
+                f=$(sed -n 's/.*failures="\([0-9]*\)".*/\1/p' "$x" | head -1)
+                e=$(sed -n 's/.*errors="\([0-9]*\)".*/\1/p' "$x" | head -1)
+                s=$(sed -n 's/.*skipped="\([0-9]*\)".*/\1/p' "$x" | head -1)
+                echo "| \`${n:-unknown}\` | ${t:-0} | ${f:-0} | ${e:-0} | ${s:-0} |"
+                T=$((T + ${t:-0})); F=$((F + ${f:-0}))
+                E=$((E + ${e:-0})); S=$((S + ${s:-0}))
+              done
+              echo ""
+              echo "**Total: ${T} run, ${F} failed, ${E} errored, ${S} skipped**"
+            else
+              echo "No test results were produced (the task did not reach the test phase)."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results
+          path: |
+            app/build/test-results/**/*.xml
+            app/build/reports/tests/**
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # =========================================================================
+  # Publish to a single rolling Release so the phone always has one URL.
+  # =========================================================================
+  release:
+    name: Publish APK to Release
+    needs: [android]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download the APK
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.APK_ARTIFACT }}
+          path: dist
+
+      - name: Locate the APK
+        run: |
+          set -euo pipefail
+          ls -la dist
+          APK="$(find dist -name '*.apk' | head -1)"
+          [ -n "$APK" ] || { echo "::error::no APK found to publish"; exit 1; }
+          echo "APK_PATH=$APK" >> "$GITHUB_ENV"
+          echo "APK_BASE=$(basename "$APK")" >> "$GITHUB_ENV"
+
+      - name: Write release notes
+        run: |
+          set -euo pipefail
+          SHA="$(sha256sum "$APK_PATH" | cut -d' ' -f1)"
+          SIZE="$(du -h "$APK_PATH" | cut -f1)"
+          cat > notes.md <<NOTES
+          ## Varun Studio - installable APK
+
+          A real, signed, installable Android APK built by GitHub Actions from the
+          source in this repository. Not a mockup, not a web app.
+
+          | | |
+          |---|---|
+          | File | \`${APK_BASE}\` |
+          | Size | ${SIZE} |
+          | SHA-256 | \`${SHA}\` |
+          | ABI | ${ABIS} (64-bit ARM) |
+          | minSdk | 26 (Android 8.0) |
+          | targetSdk | ${VARUN_COMPILE_SDK} |
+          | Commit | \`${GITHUB_SHA}\` |
+
+          ### Installing from your phone
+
+          1. Open this page in your phone's browser and tap the APK under **Assets**.
+          2. When Android warns about "unknown apps", allow it for your browser once.
+          3. Open the downloaded file and tap **Install**.
+          4. Launch **Varun Studio**.
+
+          This is a debug-signed build: fully functional, and the right artifact for
+          sideloading. The signing key is cached between builds so later versions
+          install over the top without an uninstall.
+
+          ### No model is bundled
+
+          Nothing is auto-downloaded. On first launch open **Models** and either
+          import a \`.gguf\` you already have, or download one from the in-app
+          catalogue with your explicit consent. Recommended starting point for an
+          8 GB phone: **Qwen2.5-Coder-1.5B-Instruct Q4_K_M** (~1.14 GB, Apache-2.0).
+
+          ### What is verified
+
+          See \`docs/TESTING.md\`. The native engine contract is verified by an
+          executable host test and the Kotlin layers by JVM unit tests. On-device
+          inference speed and model quality have NOT been measured on a physical
+          phone and are reported as unverified until you run it yourself.
+          NOTES
+          echo "----- release notes -----"
+          cat notes.md
+
+      - name: Create or update the rolling release
+        run: |
+          set -euo pipefail
+          TAG="apk-latest"
+          gh release create "$TAG" \
+            --title "Varun Studio - latest APK" \
+            --notes-file notes.md \
+            --target "$GITHUB_SHA" \
+            --latest || echo "Release '$TAG' already exists; updating it."
+          # Keep the notes current even when the release already existed.
+          gh release edit "$TAG" --notes-file notes.md || true
+          gh release upload "$TAG" "$APK_PATH" --clobber
+          if [ -f "${APK_PATH}.sha256" ]; then
+            gh release upload "$TAG" "${APK_PATH}.sha256" --clobber
+          fi
+          {
+            echo "### Published"
+            echo ""
+            echo "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}"
+          } >> "$GITHUB_STEP_SUMMARY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vector launcher icon: a terminal prompt caret inside a rounded bracket.
+     Vector XML means no binary PNG assets need to be committed. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group android:scaleX="0.62" android:scaleY="0.62"
+        android:translateX="20.5" android:translateY="20.5">
+        <path
+            android:fillColor="#38BDF8"
+            android:pathData="M30,22 L22,30 L44,54 L22,78 L30,86 L60,54 Z" />
+        <path
+            android:fillColor="#A5F3FC"
+            android:pathData="M62,74 L62,86 L92,86 L92,74 Z" />
+        <path
+            android:fillColor="#22D3EE"
+            android:pathData="M76,22 L84,30 L70,45 L84,60 L76,68 L54,45 Z"
+            android:fillAlpha="0.55" />
+    </group>
+</vector>

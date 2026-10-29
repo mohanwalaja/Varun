@@ -1,0 +1,70 @@
+# ---------------------------------------------------------------------------
+# Build outputs. Native builds in particular are enormous (a full llama.cpp
+# cross-compile per ABI) and must never be committed.
+# ---------------------------------------------------------------------------
+build/
+app/build/
+app/release/
+app/debug/
+.cxx/
+app/.cxx/
+build-hosttest/
+build-host/
+*.so
+*.a
+*.o
+*.obj
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle/wrapper/gradle-wrapper.jar
+local.properties
+
+# ---------------------------------------------------------------------------
+# Secrets. NEVER commit a signing key or its passwords, and never commit a
+# GitHub token. The release keystore is injected by CI or created on-device.
+# ---------------------------------------------------------------------------
+keystore.properties
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+.env
+.env.*
+github-token*
+*-token.txt
+
+# ---------------------------------------------------------------------------
+# App data that may land in the working tree during manual testing.
+# ---------------------------------------------------------------------------
+*.gguf
+*.gguf.part
+.varun-journal.log
+.varun-backups/
+varun.db
+varun.db-*
+
+# ---------------------------------------------------------------------------
+# IDE / OS noise
+# ---------------------------------------------------------------------------
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+captures/
+.externalNativeBuild/
+
+# Test + tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+__pycache__/
+*.pyc

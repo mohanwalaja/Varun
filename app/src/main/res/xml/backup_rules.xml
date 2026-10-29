@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Deliberately EMPTY-ish: the app stores GitHub tokens and private source
+     code in app-private storage. Backing those up to Google's cloud would
+     violate the "private code stays on device" requirement. -->
+<full-backup-content>
+    <exclude domain="sharedpref" path="varun_secure_vault.xml" />
+    <exclude domain="database" path="varun.db" />
+    <exclude domain="file" path="models/" />
+    <exclude domain="file" path="workspaces/" />
+    <exclude domain="file" path="backups/" />
+</full-backup-content>
