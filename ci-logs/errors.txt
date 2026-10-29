@@ -1,121 +1,16 @@
-===== JUnit: tests=207 failures=8 errors=0 skipped=0 =====
-FAILURE dev.varun.studio.agent.PromptLibraryTest.build discloses dropped files instead of hiding them
-      message: java.lang.AssertionError
-      trace: java.lang.AssertionError
-	at org.junit.Assert.fail(Assert.java:87)
-	at org.junit.Assert.assertTrue(Assert.java:42)
-	at org.junit.Assert.assertTrue(Assert.java:53)
-	at dev.varun.studio.agent.PromptLibraryTest.build discloses dropped files instead of hiding them(PromptLibraryTest.kt:258)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
-	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
-	at org
-FAILURE dev.varun.studio.ai.MemoryEstimatorTest.estimateParams subtracts the metadata allowance and scales with quant
-      message: java.lang.AssertionError: expected ~1.6B params, got 1876953151
-      trace: java.lang.AssertionError: expected ~1.6B params, got 1876953151
-	at org.junit.Assert.fail(Assert.java:89)
-	at org.junit.Assert.assertTrue(Assert.java:42)
-	at dev.varun.studio.ai.MemoryEstimatorTest.estimateParams subtracts the metadata allowance and scales with quant(MemoryEstimatorTest.kt:94)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
-	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+===== JUnit: tests=208 failures=1 errors=0 skipped=0 =====
 FAILURE dev.varun.studio.ai.ModelCatalogTest.every catalogue url is https, on an allowed host, and passes checkUrl
-      message: org.junit.ComparisonFailure: llama-3.2-1b-instruct-q4_k_m: the url must actually point at the declared filename expected:<[llama-3.2-1b-instruct-q4_k_m].gguf> but was:<[Llama-3.2-1B-Instruct-Q4_K_M].gguf>
-      trace: org.junit.ComparisonFailure: llama-3.2-1b-instruct-q4_k_m: the url must actually point at the declared filename expected:<[llama-3.2-1b-instruct-q4_k_m].gguf> but was:<[Llama-3.2-1B-Instruct-Q4_K_M].gguf>
+      message: org.junit.ComparisonFailure: tinyllama-1.1b-chat-q4_k_m: the url must actually point at the declared filename expected:<...llama-1.1b-chat-v1.0[-]q4_k_m.gguf> but was:<...llama-1.1b-chat-v1.0[.]q4_k_m.gguf>
+      trace: org.junit.ComparisonFailure: tinyllama-1.1b-chat-q4_k_m: the url must actually point at the declared filename expected:<...llama-1.1b-chat-v1.0[-]q4_k_m.gguf> but was:<...llama-1.1b-chat-v1.0[.]q4_k_m.gguf>
 	at org.junit.Assert.assertEquals(Assert.java:117)
-	at dev.varun.studio.ai.ModelCatalogTest.every catalogue url is https, on an allowed host, and passes checkUrl(ModelCatalogTest.kt:80)
+	at dev.varun.studio.ai.ModelCatalogTest.every catalogue url is https, on an allowed host, and passes checkUrl(ModelCatalogTest.kt:87)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMetho
-FAILURE dev.varun.studio.workspace.ArchiveExtractorTest.corrupt zip is a Failure rather than a crash
-      message: java.lang.AssertionError: corrupt input must be handled, got Success(filesWritten=0, bytesWritten=0, skipped=0, rootPrefix=null)
-      trace: java.lang.AssertionError: corrupt input must be handled, got Success(filesWritten=0, bytesWritten=0, skipped=0, rootPrefix=null)
-	at org.junit.Assert.fail(Assert.java:89)
-	at org.junit.Assert.assertTrue(Assert.java:42)
-	at dev.varun.studio.workspace.ArchiveExtractorTest.corrupt zip is a Failure rather than a crash(ArchiveExtractorTest.kt:222)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
-	at org.junit.internal.runners.stat
-FAILURE dev.varun.studio.workspace.DiffEngineTest.hunks group nearby changes and expose unified-diff headers
-      message: java.lang.AssertionError: expected:<7> but was:<8>
-      trace: java.lang.AssertionError: expected:<7> but was:<8>
-	at org.junit.Assert.fail(Assert.java:89)
-	at org.junit.Assert.failNotEquals(Assert.java:835)
-	at org.junit.Assert.assertEquals(Assert.java:120)
-	at org.junit.Assert.assertEquals(Assert.java:146)
-	at dev.varun.studio.workspace.DiffEngineTest.hunks group nearby changes and expose unified-diff headers(DiffEngineTest.kt:130)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
-	at o
-FAILURE dev.varun.studio.workspace.EditJournalTest.applied result carries the diff against the original
-      message: java.lang.AssertionError: diff against the original is required for review
-      trace: java.lang.AssertionError: diff against the original is required for review
-	at org.junit.Assert.fail(Assert.java:89)
-	at org.junit.Assert.assertTrue(Assert.java:42)
-	at org.junit.Assert.assertNotNull(Assert.java:713)
-	at dev.varun.studio.workspace.EditJournalTest.applied result carries the diff against the original(EditJournalTest.kt:120)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
-	at org.junit.internal.runners.statemen
-FAILURE dev.varun.studio.workspace.PathGuardTest.sanitizeFileName falls back for empty and reserved names
-      message: org.junit.ComparisonFailure: expected:<[backup]> but was:<[git]>
-      trace: org.junit.ComparisonFailure: expected:<[backup]> but was:<[git]>
-	at org.junit.Assert.assertEquals(Assert.java:117)
-	at org.junit.Assert.assertEquals(Assert.java:146)
-	at dev.varun.studio.workspace.PathGuardTest.sanitizeFileName falls back for empty and reserved names(PathGuardTest.kt:170)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
-	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
-	at
-FAILURE dev.varun.studio.workspace.PathGuardTest.sanitizeFileName strips separators and traversal
-      message: java.lang.AssertionError: must not contain '..': _.._etc_passwd
-      trace: java.lang.AssertionError: must not contain '..': _.._etc_passwd
-	at org.junit.Assert.fail(Assert.java:89)
-	at org.junit.Assert.assertTrue(Assert.java:42)
-	at org.junit.Assert.assertFalse(Assert.java:65)
-	at dev.varun.studio.workspace.PathGuardTest.sanitizeFileName strips separators and traversal(PathGuardTest.kt:163)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
-	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
-	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
-	at org.junit.internal.runners.statements.InvokeMethod.evalua
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMet
 ===== gradle-assemble.log : compiler / gradle diagnostics =====
 ----- gradle-assemble.log : last 150 lines -----
 Downloading https://services.gradle.org/distributions/gradle-8.9-bin.zip
@@ -142,25 +37,35 @@ Daemon will be stopped at the end of the build
 > Task :app:mapDebugSourceSetPaths
 > Task :app:generateDebugResources
 > Task :app:packageDebugResources
-> Task :app:mergeDebugResources
 > Task :app:createDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDebug
+> Task :app:mergeDebugResources
 > Task :app:parseDebugLocalResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
 > Task :app:javaPreCompileDebug
-> Task :app:processDebugManifestForPackage
 > Task :app:mergeDebugShaders
 > Task :app:compileDebugShaders NO-SOURCE
 > Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
 > Task :app:compressDebugAssets
 > Task :app:desugarDebugFileDependencies
-> Task :app:processDebugResources
 > Task :app:checkDebugDuplicateClasses
-> Task :app:compileDebugKotlin
-> Task :app:mergeExtDexDebug
 
+> Task :app:configureCMakeDebug[arm64-v8a]
+C/C++: CMAKE_BUILD_TYPE=Debug
+
+> Task :app:processDebugManifestForPackage
+> Task :app:mergeExtDexDebug
+> Task :app:mergeLibDexDebug
+> Task :app:processDebugResources
+> Task :app:buildCMakeDebug[arm64-v8a]
+> Task :app:mergeDebugJniLibFolders
+> Task :app:mergeDebugNativeLibs
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
+> Task :app:stripDebugDebugSymbols
 > Task :app:compileDebugKotlin
 w: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/MainActivity.kt:98:18 This declaration overrides a deprecated member but is not marked as deprecated itself. Please add the '@Deprecated' annotation or suppress the diagnostic.
 w: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/MainActivity.kt:106:15 'fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray): Unit' is deprecated. This method has been deprecated in favor of using the Activity Result API
@@ -182,33 +87,21 @@ w: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/
 > Task :app:dexBuilderDebug
 > Task :app:mergeDebugGlobalSynthetics
 > Task :app:processDebugJavaRes
-> Task :app:mergeLibDexDebug
 > Task :app:mergeProjectDexDebug
 > Task :app:mergeDebugJavaResource
-
-> Task :app:configureCMakeDebug[arm64-v8a]
-C/C++: CMAKE_BUILD_TYPE=Debug
-
-> Task :app:buildCMakeDebug[arm64-v8a]
-> Task :app:mergeDebugJniLibFolders
-> Task :app:mergeDebugNativeLibs
-> Task :app:validateSigningDebug
-> Task :app:writeDebugAppMetadata
-> Task :app:writeDebugSigningConfigVersions
-> Task :app:stripDebugDebugSymbols
 > Task :app:packageDebug
 > Task :app:createDebugApkListingFileRedirect
 > Task :app:assembleDebug
 
-BUILD SUCCESSFUL in 4m 47s
+BUILD SUCCESSFUL in 3m 59s
 39 actionable tasks: 39 executed
 ===== gradle-test.log : compiler / gradle diagnostics =====
-60:> Task :app:testDebugUnitTest FAILED
-62:FAILURE: Build failed with an exception.
-64:* What went wrong:
-65:Execution failed for task ':app:testDebugUnitTest'.
-68:* Try:
-104:Caused by: org.gradle.api.internal.exceptions.MarkedVerificationException: There were failing tests. See the report at: file:///home/runner/work/Varun/Varun/app/build/reports/tests/testDebugUnitTest/index.html
+39:> Task :app:testDebugUnitTest FAILED
+41:FAILURE: Build failed with an exception.
+43:* What went wrong:
+44:Execution failed for task ':app:testDebugUnitTest'.
+47:* Try:
+83:Caused by: org.gradle.api.internal.exceptions.MarkedVerificationException: There were failing tests. See the report at: file:///home/runner/work/Varun/Varun/app/build/reports/tests/testDebugUnitTest/index.html
 ----- gradle-test.log : last 150 lines -----
 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
@@ -358,5 +251,5 @@ Caused by: org.gradle.api.internal.exceptions.MarkedVerificationException: There
 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
 
 
-BUILD FAILED in 29s
+BUILD FAILED in 23s
 24 actionable tasks: 5 executed, 1 from cache, 18 up-to-date
