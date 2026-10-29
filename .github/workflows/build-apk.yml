@@ -293,6 +293,46 @@ jobs:
           set -uo pipefail
           mkdir -p ci-logs
           : > ci-logs/errors.txt
+          : > ci-logs/oneline.txt
+
+          # ---------------------------------------------------------------
+          # JUnit results FIRST: "Execution failed for task
+          # :app:testDebugUnitTest" names no test, so parse the XML reports.
+          # ---------------------------------------------------------------
+          python3 - <<'PY' >> ci-logs/errors.txt 2>&1 || true
+          import glob, xml.etree.ElementTree as ET
+          pat = 'app/build/test-results/testDebugUnitTest/*.xml'
+          files = sorted(glob.glob(pat))
+          if not files:
+              print('===== no JUnit XML found at %s =====' % pat)
+          tot = fail = err = skip = 0
+          rows, one = [], []
+          for x in files:
+              try:
+                  root = ET.parse(x).getroot()
+              except Exception as e:
+                  print('could not parse %s: %s' % (x, e))
+                  continue
+              tot  += int(root.get('tests', 0) or 0)
+              fail += int(root.get('failures', 0) or 0)
+              err  += int(root.get('errors', 0) or 0)
+              skip += int(root.get('skipped', 0) or 0)
+              for tc in root.iter('testcase'):
+                  for kind in ('failure', 'error'):
+                      for f in tc.findall(kind):
+                          msg = ' '.join((f.get('message') or '').split())
+                          txt = (f.text or '').strip()
+                          name = '%s.%s' % (tc.get('classname'), tc.get('name'))
+                          one.append('%s :: %s' % (name, msg[:280]))
+                          rows.append('%s %s\n      message: %s\n      trace: %s'
+                                      % (kind.upper(), name, msg[:400], txt[:1000]))
+          print('===== JUnit: tests=%d failures=%d errors=%d skipped=%d ====='
+                % (tot, fail, err, skip))
+          for r in rows[:40]:
+              print(r)
+          with open('ci-logs/oneline.txt', 'w') as fh:
+              fh.write('\n'.join(one[:40]))
+          PY
 
           for L in gradle-assemble.log gradle-test.log; do
             [ -f "$L" ] || continue
@@ -313,11 +353,15 @@ jobs:
           # Channel 1: annotations, readable via
           #   GET /repos/{owner}/{repo}/check-runs/{job_id}/annotations
           # '%' must be escaped as %25 and CR as %0D in a workflow command.
-          head -30 ci-logs/errors.txt \
+          # Prefer the one-line-per-failure file so a single annotation carries
+          # a whole test failure instead of one line of a stack trace.
+          SRC=ci-logs/errors.txt
+          [ -s ci-logs/oneline.txt ] && SRC=ci-logs/oneline.txt
+          head -30 "$SRC" \
             | sed -e 's/%/%25/g' -e 's/\r/%0D/g' -e 's/^[[:space:]]*//' \
             | cut -c1-380 \
             | while IFS= read -r line; do
-                [ -n "$line" ] && printf '::error title=gradle::%s\n' "$line"
+                [ -n "$line" ] && printf '::error title=build::%s\n' "$line"
               done
 
           # Channel 2: the job summary
