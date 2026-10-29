@@ -145,7 +145,11 @@ object ModelCatalog {
             family = "TinyLlama",
             params = "1.1B",
             quant = "Q4_K_M",
-            fileName = "tinyllama-1.1b-chat-v1.0-q4_k_m.gguf",
+            // Matches the remote name: TheBloke's GGUF convention is
+            // "<model>.<QUANT>.gguf" with a DOT before the quantization, not a
+            // hyphen. Lowercased here because fileName is the local name the
+            // download is saved under, consistent with the other entries.
+            fileName = "tinyllama-1.1b-chat-v1.0.q4_k_m.gguf",
             url = "https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/" +
                 "tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf",
             sizeBytes = 670_000_000L,
