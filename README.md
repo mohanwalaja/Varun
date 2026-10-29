@@ -9,6 +9,41 @@ API, no account, no per-token cost, no source code leaving the device.
 
 ---
 
+## Target device: vivo T4x
+
+The build is configured against this phone's published specification.
+
+| | vivo T4x | What the build does |
+|---|---|---|
+| SoC | MediaTek Dimensity 7300 (4 nm) | — |
+| CPU | 4× Cortex-A78 @ 2.5 GHz + 4× Cortex-A55 @ 2.0 GHz | Default 3 inference threads; 4 is a reasonable manual setting (Settings → Inference). Only the A78 cluster should be used — the A55 cores are far slower and dragging them in costs more than it gains. |
+| Architecture | 64-bit, **arm64-v8a** | `arm64-v8a` is the only ABI built by default, so the APK matches. |
+| GPU | Mali-G615 MC2 | **Not used.** Inference is CPU-only (see caveat below). |
+| OS | Android 15 / Funtouch OS 15 (API 35) | `targetSdk 35`, `compileSdk 35`. `minSdk 26`, so anything from Android 8.0 up installs. |
+| RAM | 6 GB or 8 GB LPDDR4X | See the model table below. |
+| Storage | 128 / 256 GB UFS 3.1 | A 1.14 GB model plus workspace is comfortably within budget. |
+
+**Model choice by RAM variant.** Qwen2.5-Coder-1.5B Q4_K_M (~1.14 GB, app
+minimum 3 GB) fits **both** the 6 GB and 8 GB variants and is the recommended
+entry. The 3B Q4_K_M (~1.9 GB, app minimum 5 GB) is workable on 8 GB and
+marginal on 6 GB — the in-app estimator will rate it `TIGHT` or `UNLIKELY`
+rather than let you load it blind.
+
+**Why `GGML_NATIVE=OFF` matters here.** The native library is cross-compiled on
+an x86-64 GitHub runner. If llama.cpp auto-detected the *build* machine's CPU
+flags it would emit instructions the Dimensity 7300 does not have, and the
+library would die with `SIGILL` on first load. It is forced off so the binary
+targets baseline arm64-v8a instead.
+
+> **Honest caveat.** The above is *specification-level* compatibility, derived
+> from the published hardware and OS versions. The app has **not** been run on a
+> physical vivo T4x, so this is not a runtime verification. Inference is
+> **CPU-only**: the Mali-G615 GPU is deliberately not used, because the Vulkan
+> and OpenCL backends are disabled in this build for predictability and APK
+> size. Expect phone-class token rates, not desktop-class ones.
+
+---
+
 ## Download the APK
 
 **[github.com/mohanwalaja/Varun/releases/tag/apk-latest](https://github.com/mohanwalaja/Varun/releases/tag/apk-latest)**

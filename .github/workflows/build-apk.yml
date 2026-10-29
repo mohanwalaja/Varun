@@ -173,11 +173,16 @@ jobs:
 
       - name: Assemble the debug APK
         run: |
+          set -uo pipefail
+          # Tee to a log file: the Actions log itself lives on a blob host that is
+          # not always reachable, so the failure-report step below republishes the
+          # compiler diagnostics as annotations and as a committed file.
           ./gradlew --no-daemon --stacktrace \
             :app:assembleDebug \
             -PVARUN_ABIS="${ABIS}" \
             -PVARUN_NDK_VERSION="${VARUN_NDK_VERSION}" \
-            -PVARUN_CMAKE_VERSION="${VARUN_CMAKE_VERSION}"
+            -PVARUN_CMAKE_VERSION="${VARUN_CMAKE_VERSION}" 2>&1 | tee gradle-assemble.log
+          exit "${PIPESTATUS[0]}"
 
       - name: Verify the APK contents
         run: |
@@ -229,7 +234,9 @@ jobs:
 
       - name: Run JVM unit tests
         run: |
-          ./gradlew --no-daemon --stacktrace :app:testDebugUnitTest
+          set -uo pipefail
+          ./gradlew --no-daemon --stacktrace :app:testDebugUnitTest 2>&1 | tee gradle-test.log
+          exit "${PIPESTATUS[0]}"
 
       - name: Summarise unit tests
         if: always()
@@ -268,6 +275,72 @@ jobs:
             app/build/reports/tests/**
           if-no-files-found: ignore
           retention-days: 14
+
+      # ---------------------------------------------------------------------
+      # The Actions job log is stored on an Azure blob host that is not
+      # reachable from every environment, and "Process completed with exit
+      # code 1" is the only thing the annotations API reports by default.
+      # This step republishes the actual compiler diagnostics through two
+      # channels that ARE reachable: check-run annotations, and a file
+      # committed back to the branch. It exists purely so a build failure can
+      # be diagnosed without downloading the raw log.
+      # ---------------------------------------------------------------------
+      - name: Report build errors
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -uo pipefail
+          mkdir -p ci-logs
+          : > ci-logs/errors.txt
+
+          for L in gradle-assemble.log gradle-test.log; do
+            [ -f "$L" ] || continue
+            {
+              echo "===== ${L} : compiler / gradle diagnostics ====="
+              grep -nE '^(e: |FAILURE:|Caused by:|\* What went wrong|\* Try:|> Task .* FAILED|Execution failed for task|.*error: |A problem occurred )' "$L" \
+                | head -80
+              echo "----- ${L} : last 150 lines -----"
+              tail -150 "$L"
+            } >> ci-logs/errors.txt 2>/dev/null || true
+          done
+
+          if [ ! -s ci-logs/errors.txt ]; then
+            echo "(no gradle log was produced - the failure happened before gradle ran)" \
+              > ci-logs/errors.txt
+          fi
+
+          # Channel 1: annotations, readable via
+          #   GET /repos/{owner}/{repo}/check-runs/{job_id}/annotations
+          # '%' must be escaped as %25 and CR as %0D in a workflow command.
+          head -30 ci-logs/errors.txt \
+            | sed -e 's/%/%25/g' -e 's/\r/%0D/g' -e 's/^[[:space:]]*//' \
+            | cut -c1-380 \
+            | while IFS= read -r line; do
+                [ -n "$line" ] && printf '::error title=gradle::%s\n' "$line"
+              done
+
+          # Channel 2: the job summary
+          {
+            echo "## Build failure diagnostics"
+            echo ""
+            echo '```'
+            head -200 ci-logs/errors.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          # Channel 3: commit the log back to this branch. [skip ci] stops the
+          # push from re-triggering this workflow.
+          BR="${GITHUB_REF#refs/heads/}"
+          git config user.name  "varun-ci"
+          git config user.email "varun-ci@users.noreply.github.com"
+          git add -f ci-logs/errors.txt
+          if git commit -q -m "ci: capture build failure diagnostics [skip ci]"; then
+            git push -q origin "HEAD:${BR}" \
+              || echo "::warning::could not push ci-logs/errors.txt back to ${BR}"
+          else
+            echo "::notice::nothing to commit for ci-logs"
+          fi
 
   # =========================================================================
   # Publish to a single rolling Release so the phone always has one URL.
