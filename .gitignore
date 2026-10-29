@@ -68,3 +68,6 @@ captures/
 .ruff_cache/
 __pycache__/
 *.pyc
+
+# CI failure diagnostics, committed back by the workflow only on failure
+ci-logs/

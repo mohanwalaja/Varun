@@ -3,9 +3,11 @@
 This document is deliberately blunt about what was **proven**, what was only
 **written**, and what **could not be checked at all**.
 
-The build environment for this project had no `javac`, no Android SDK, no Gradle
-distribution and no access to Maven Central. That constraint shaped everything
-below, and it is stated here rather than hidden.
+The environment where this code was **written** had no `javac`, no Android SDK,
+no Gradle distribution and no access to Maven Central, so nothing could be
+compiled locally at all. Every compilation and test execution reported below
+happened in GitHub Actions. That constraint shaped the order of the work, and
+it is stated here rather than hidden.
 
 ---
 
@@ -15,8 +17,8 @@ below, and it is stated here rather than hidden.
 |---|---|---|
 | Native C++ engine | Compiled **and executed** on a Linux host against a real llama.cpp build and a real GGUF file | ✅ **50 / 50 assertions passed** |
 | JNI bridge | Compiled `-Werror` against a real `jni.h`; exported symbols enumerated with `nm` | ✅ **13 entry points confirmed** |
-| Kotlin / Compose app | Static cross-checking only (no JVM in the build environment) | ⚠️ **First real compile happens in GitHub Actions** |
-| Kotlin unit tests | 9 suites written against verified API signatures | ⚠️ **Not yet executed** — they run in CI |
+| Kotlin / Compose app | Compiled by Gradle 8.9 + Kotlin 2.0.21 + AGP 8.7.3 on a GitHub Actions runner, then packaged and signed | ✅ **APK built** — `Varun-Studio-1.0.0-arm64-v8a.apk`, 28 MB |
+| Kotlin unit tests | 9 suites, executed by `:app:testDebugUnitTest` on a CI runner | ✅ **207 tests, 0 failures** |
 | Android emulator | Not available | ❌ **Blocked** |
 | Physical device | Not available | ❌ **Blocked** |
 | On-device inference speed / quality | Requires a physical device | ❌ **Unverified** |
@@ -116,9 +118,7 @@ file was written as a substitute.
 
 ---
 
-## What was written but NOT executed
-
-### Kotlin unit tests — 9 suites
+## Kotlin unit tests — 9 suites, 207 executed in CI
 
 | Suite | Target | Focus |
 |---|---|---|
@@ -134,11 +134,49 @@ file was written as a substitute.
 
 These compile against API signatures that were read directly out of the source
 files, and every resource reference, ViewModel member access and intra-project
-import was cross-checked mechanically before writing them. **They have never
-been run.** The `android` CI job runs them and publishes a per-suite table to
-the job summary.
+import was cross-checked mechanically before writing them.
 
-Two real defects were found by writing these tests:
+**They have now actually been run.** The `android` CI job executes
+`:app:testDebugUnitTest` on a GitHub-hosted runner and publishes a per-suite
+table to the job summary.
+
+- First real execution (run `40849511839`): **207 tests, 199 passed, 8 failed.**
+- Current state (run `40852797898`): **207 tests, 0 failures**, and the same run
+  built, verified and published the APK.
+
+Each of the 8 failures was traced to its root cause before deciding whether the
+source or the test was wrong. **Three were real defects in shipped source:**
+
+| Where | Defect |
+|---|---|
+| `PathGuard.sanitizeFileName` | `../../etc/passwd` sanitised to `_.._etc_passwd`, which still contains `..`. Separately, the reserved-name check ran *after* `trim('.')`, so `.git` was disguised as `git` and passed as something that merely looks safe. Dot runs are now collapsed and the caller's original spelling is checked too. |
+| `ArchiveExtractor.extractZip` | A file that is not a zip makes `ZipInputStream` report "no entries" rather than throw, so a corrupt archive returned `Success(filesWritten = 0)` — a silently empty workspace with no explanation. The ZIP container magic is now verified first, accepting both `PK\x03\x04` and the `PK\x05\x06` of a valid entry-less archive. |
+| `ModelCatalog` | The TinyLlama entry declared `tinyllama-1.1b-chat-v1.0-q4_k_m.gguf` while its URL fetches `tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf` — TheBloke's convention puts a **dot** before the quantization. `fileName` is the name the download is saved under, so a mismatch makes the model manager misleading and any name-based verification meaningless. |
+
+The other five were **test bugs, and the implementation was deliberately left
+alone**:
+
+- `DiffEngine.hunks` returns **8** lines for a one-line change with 3 lines of
+  context, because a change is *two* diff lines (`-old` and `+new`). The test
+  said 7. Traced through `hunks()`: `slice = lines[1..8]`.
+- The `estimateParams` expectation rested on wrong arithmetic:
+  `(1_140_000_000 − 2 MiB) ÷ (4.85 / 8)` = **1_876_953_151**, i.e. ~1.88 B, not
+  the 1.6 B the test asserted. The implementation does exactly what it documents.
+- The catalogue URL check demanded a byte-identical filename, but Hugging Face
+  paths are case-sensitive and bartowski really publishes
+  `Llama-3.2-1B-Instruct-Q4_K_M.gguf`. Now compared case-insensitively, which
+  preserves the real intent: the URL must point at the declared file.
+- The `EditJournal` diff test never created the file it claimed to diff against.
+  `applyApproved` reads the original from **disk**, not from
+  `proposal.originalText`, because the file may change between proposal and
+  approval and the backup is taken from disk too. That is the correct design.
+- The `PromptLibrary` "dropped files" test built a scenario that drops nothing:
+  an oversized file is **truncated and kept** by `applyBudget`, not dropped.
+  Fixed by forcing a real drop via `maxFiles = 1`, and a companion test was
+  added for the truncation path, since a fragment passed off as a whole file is
+  the more dangerous of the two.
+
+Before CI ever ran, writing these tests had already found two further defects:
 
 - `ChatRepository.updateAssistantMessage` inserted a **new row with
   `sessionId = 0`** instead of updating the streamed message. That would have
@@ -169,7 +207,9 @@ code is written without a compiler. They are **not** a substitute for one.
 
 ## What is blocked, and why
 
-### No JVM anywhere in the build environment
+### No JVM in the authoring environment — closed by running CI
+
+Nothing could be compiled where the code was written:
 
 - `dl.google.com` (Android SDK, JDK) — **blocked**
 - `services.gradle.org` (Gradle distributions) — **blocked**
@@ -180,8 +220,17 @@ code is written without a compiler. They are **not** a substitute for one.
   **404 or a placeholder package**
 
 Only `codeload.github.com` source tarballs and PyPI's own index were reachable.
-So: **no Kotlin or Java compilation, and no JUnit execution, was possible
-locally.** This is the single largest gap in the verification story.
+**This gap was closed by building in GitHub Actions instead**, which is why
+`.github/workflows/build-apk.yml` is part of the deliverable rather than a
+convenience: it is the only toolchain that has ever compiled this code, and the
+APK in the `apk-latest` release is its output.
+
+One consequence of that same network block is still open: **the finished APK
+cannot be pulled back into the authoring environment.** The release-asset host
+fails the TLS handshake, and at 28 MB the APK is far above the contents API's
+1 MB inline limit. The APK is therefore delivered only from the GitHub Release
+page, which a phone browser reaches directly. It has not been mirrored anywhere
+else.
 
 ### No emulator, no device
 
@@ -208,8 +257,8 @@ Status key:
 
 | # | Criterion | Status | Evidence / gap |
 |---|---|---|---|
-| 1 | Native Android app (Kotlin + Compose), not a website, PWA or mockup | 🟡 | Complete Compose source tree, `AndroidManifest.xml`, Gradle config. Compiles only in CI. |
-| 2 | A real installable APK can be produced without the user owning a computer | 🟡 | `.github/workflows/build-apk.yml` builds and publishes to a Release. **Pending first green run.** |
+| 1 | Native Android app (Kotlin + Compose), not a website, PWA or mockup | ✅ | Compiled by Kotlin 2.0.21 + AGP 8.7.3 and packaged into a real APK whose manifest, DEX and `lib/arm64-v8a/libvarunllama.so` were verified in CI. No web runtime of any kind is present. |
+| 2 | A real installable APK can be produced without the user owning a computer | ✅ | Run `40852797898` produced `Varun-Studio-1.0.0-arm64-v8a.apk` (28 MB, SHA-256 `907682a3…218b`) and published it to the `apk-latest` Release, reachable from a phone browser. **First actual install on a device is still pending — see the note below.** |
 | 3 | All AI inference runs on device; no cloud AI calls | ✅ | Inference goes only through JNI → llama.cpp. No network code exists in the AI path. Engine execution proven by host tests. |
 | 4 | GGUF models importable from phone storage (SAF) | 🟡 | `ActivityResultContracts.OpenDocument` + `ModelRepository.importFromUri`. No storage permissions requested. Not exercised on a device. |
 | 5 | Model manager shows size/format/status/estimated memory; never auto-downloads or auto-loads | 🟡 | Estimator unit-tested for arithmetic; consent dialog gates every download; `download(entry, userConsented)` refuses without consent. UI not run. |
