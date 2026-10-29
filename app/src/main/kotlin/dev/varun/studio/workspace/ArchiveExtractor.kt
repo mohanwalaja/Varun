@@ -69,7 +69,33 @@ object ArchiveExtractor {
 
     // ------------------------------------------------------------------ ZIP
 
+    /**
+     * ZIP local-file-header magic, and the end-of-central-directory magic that a
+     * valid archive containing zero entries consists of.
+     */
+    private val ZIP_LOCAL_MAGIC = byteArrayOf(0x50, 0x4B, 0x03, 0x04)
+    private val ZIP_EMPTY_MAGIC = byteArrayOf(0x50, 0x4B, 0x05, 0x06)
+
+    private fun hasZipMagic(archive: File): Boolean {
+        val head = ByteArray(4)
+        val n = runCatching { archive.inputStream().use { it.read(head) } }.getOrDefault(-1)
+        if (n != 4) return false
+        return head.contentEquals(ZIP_LOCAL_MAGIC) || head.contentEquals(ZIP_EMPTY_MAGIC)
+    }
+
     private fun extractZip(archive: File, dest: File, options: Options, progress: ArchiveProgress?): ExtractResult {
+        // A ZipInputStream over bytes that are not a zip simply reports "no
+        // entries" instead of throwing, which would be returned as a successful
+        // extraction of zero files - a silently empty workspace with no
+        // explanation. Verify the container magic first. (A truncated but
+        // genuine zip throws part-way through and is already turned into a
+        // Failure by the catch in extract().)
+        if (!hasZipMagic(archive)) {
+            return ExtractResult.Failure(
+                "Not a readable .zip archive (${archive.name}). The file may be corrupt, " +
+                    "truncated, or not a zip at all. Re-download or re-export it and try again.",
+            )
+        }
         dest.mkdirs()
         var written = 0
         var bytes = 0L

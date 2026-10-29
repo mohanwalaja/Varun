@@ -114,6 +114,11 @@ class EditJournalTest {
 
     @Test
     fun `applied result carries the diff against the original`() {
+        // applyApproved deliberately diffs against the bytes actually on disk,
+        // not against proposal.originalText: the file may have changed between
+        // the proposal and the user's approval, and the backup is taken from
+        // disk too. So the file has to exist for there to be an original.
+        File(root, "D.kt").writeText("a\nb\n")
         val r = journal.applyApproved(proposal("D.kt", "a\nb\n", "a\nB\n"))
         assertTrue(r is EditJournal.ApplyResult.Applied)
         val diff = (r as EditJournal.ApplyResult.Applied).diff

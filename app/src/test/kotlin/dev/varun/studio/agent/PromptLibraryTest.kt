@@ -248,17 +248,38 @@ class PromptLibraryTest {
 
     @Test
     fun `build discloses dropped files instead of hiding them`() {
+        // maxFiles = 1 is what forces a drop. An oversized file alone does NOT
+        // get dropped: applyBudget truncates it and keeps it, so with a file
+        // limit of 5 both files below survive and `dropped` stays empty.
         val budgeted = PromptLibrary.applyBudget(
             listOf(
                 PromptLibrary.CodeFile("kept.kt", "keep me\n"),
                 PromptLibrary.CodeFile("dropped.kt", "d".repeat(5000)),
             ),
-            PromptLibrary.Budget(300, 200, 5, 50),
+            PromptLibrary.Budget(300, 200, 1, 50),
         )
         assertTrue(budgeted.dropped.isNotEmpty())
         val p = PromptLibrary.build(PromptLibrary.TaskKind.EXPLAIN, "explain", budgeted)
         assertTrue("the prompt must contain an OMITTED section", p.contains("OMITTED"))
         assertTrue("and name the dropped file", p.contains("dropped.kt"))
+    }
+
+    @Test
+    fun `build discloses truncated files instead of passing them off as whole`() {
+        // The counterpart to the test above: an oversized file is NOT dropped,
+        // it is truncated and kept. If the prompt did not say so, the model
+        // would reason about a fragment while believing it had the whole file.
+        val budgeted = PromptLibrary.applyBudget(
+            listOf(PromptLibrary.CodeFile("big.kt", "line\n".repeat(2000))),
+            PromptLibrary.Budget(300, 200, 5, 50),
+        )
+        assertEquals(1, budgeted.files.size)
+        assertTrue("the oversized file should be marked truncated", budgeted.files[0].truncated)
+        assertTrue("it was truncated, not dropped", budgeted.dropped.isEmpty())
+
+        val p = PromptLibrary.build(PromptLibrary.TaskKind.EXPLAIN, "explain", budgeted)
+        assertTrue("the prompt must flag the truncation", p.contains("TRUNCATED"))
+        assertTrue("and must not embed the whole 10 KB file", p.length < 10_000)
     }
 
     @Test

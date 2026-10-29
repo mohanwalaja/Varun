@@ -38,6 +38,9 @@ object PathGuard {
 
     private val ILLEGAL_CHARS = charArrayOf('\u0000')
 
+    /** Two or more consecutive dots, collapsed by [sanitizeFileName]. */
+    private val DOT_RUNS = Regex("\\.{2,}")
+
     /**
      * Normalize a possibly-hostile relative path and resolve it against [root].
      *
@@ -152,9 +155,21 @@ object PathGuard {
             .replace('\\', '_')
             .replace('/', '_')
             .replace('\u0000', '_')
+            // Collapse runs of dots so no ".." survives. The separators are
+            // already gone, so a surviving ".." could not traverse on its own -
+            // but a sanitizer that hands back ".."-shaped text is a trap for
+            // whatever concatenates it next, and the cost of refusing is nil.
+            .replace(DOT_RUNS, ".")
             .trim()
             .trim('.')
         val bounded = if (cleaned.length > 120) cleaned.takeLast(120) else cleaned
-        return if (bounded.isEmpty() || bounded in RESERVED) fallback else bounded
+        // Also test the caller's original spelling: trimming the leading dot
+        // would otherwise disguise a reserved name (".git" -> "git") and let it
+        // through as something that merely looks safe.
+        return if (bounded.isEmpty() || bounded in RESERVED || name.trim() in RESERVED) {
+            fallback
+        } else {
+            bounded
+        }
     }
 }

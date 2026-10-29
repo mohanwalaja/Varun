@@ -126,8 +126,13 @@ class DiffEngineTest {
         assertTrue("oldStart must be >= 1", h.oldStart >= 1)
         assertTrue(h.oldCount >= 1)
         assertTrue(h.newCount >= 1)
-        // 3 lines of context above + the change + 3 below
-        assertEquals(7, h.lines.size)
+        // 3 lines of context above + the change + 3 below. A one-line change is
+        // TWO diff lines (one REMOVED, one ADDED), so 3 + 2 + 3 = 8.
+        assertEquals(8, h.lines.size)
+        // Each side of the unified-diff header counts only its own lines:
+        // 3 context + 1 + 3 context = 7 on both sides.
+        assertEquals(7, h.oldCount)
+        assertEquals(7, h.newCount)
     }
 
     @Test

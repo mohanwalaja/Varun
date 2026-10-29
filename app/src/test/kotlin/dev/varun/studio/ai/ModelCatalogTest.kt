@@ -77,10 +77,17 @@ class ModelCatalogTest {
             assertTrue("${e.id}: url must be https", e.url.startsWith("https://"))
             val check = ModelCatalog.checkUrl(e.url)
             assertTrue("${e.id}: url must validate, got $check", check is ModelCatalog.UrlCheck.Ok)
+            // Compared case-insensitively on purpose. The remote name is
+            // whatever the publisher used - Hugging Face paths are
+            // case-sensitive, e.g. bartowski publishes
+            // "Llama-3.2-1B-Instruct-Q4_K_M.gguf" - while fileName is the
+            // normalized local name the download is saved under. What must hold
+            // is that the URL points at the declared file, not that the two
+            // spellings are byte-identical.
             assertEquals(
                 "${e.id}: the url must actually point at the declared filename",
-                e.fileName,
-                (check as ModelCatalog.UrlCheck.Ok).fileName,
+                e.fileName.lowercase(),
+                (check as ModelCatalog.UrlCheck.Ok).fileName.lowercase(),
             )
             val host = java.net.URI(e.url).host.lowercase()
             assertTrue(

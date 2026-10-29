@@ -90,8 +90,13 @@ class MemoryEstimatorTest {
         val q8 = MemoryEstimator.estimateParams(fileBytes, 8.5)
         // coarser quant -> fewer params for the same file size
         assertTrue("q4=$q4 should exceed q8=$q8", q4 > q8)
-        // ~1.14 GB at 4.85 bpw is roughly 1.6-1.7 B params
-        assertTrue("expected ~1.6B params, got $q4", q4 in 1_500_000_000L..1_800_000_000L)
+        // (1_140_000_000 - 2 MiB) / (4.85 bits / 8) = 1_876_953_151, i.e. ~1.88 B.
+        // The figure is deliberately crude and runs HIGH: the vocabulary and
+        // embedding tensors live in the same file but are counted as ordinary
+        // weights, which matters for models with a large vocab. It is a display
+        // estimate only - the memory decision comes from estimateKvBytes and the
+        // compute/overhead terms, not from this.
+        assertTrue("expected ~1.88B params, got $q4", q4 in 1_850_000_000L..1_900_000_000L)
     }
 
     @Test
