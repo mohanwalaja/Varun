@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
             // Ask for notification permission once, on Android 13+. Declining is
             // fine: the foreground service still runs, just without a visible
             // notification on some OEM builds.
-            maybeRequestNotificationPermission()
+            maybeRequestNotificationPermissions()
         }
 
         setContent {
@@ -97,7 +97,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<out String>,
+        // androidx.activity.ComponentActivity is written in Kotlin and declares
+        // this as Array<String>, not the Array<out String> of the Java platform
+        // signature, so the override must match it exactly.
+        permissions: Array<String>,
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)

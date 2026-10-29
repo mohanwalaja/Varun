@@ -324,8 +324,14 @@ class CodingAgent(
                     GenerationResultCode.OUT_OF_MEMORY -> "Stopped: out of memory"
                     GenerationResultCode.DECODE_FAILED -> "Stopped: decode error"
                     GenerationResultCode.NOT_LOADED -> "Stopped: model unloaded"
-                    else -> if (changes.isEmpty()) "Complete (no file edits proposed)"
-                    else "${changes.size} proposed change(s) await your approval",
+                    // Braced: an unbraced multi-line if/else as the last `when`
+                    // branch makes the parser read the second `else` as a new
+                    // entry, which is illegal after `else`.
+                    else -> if (changes.isEmpty()) {
+                        "Complete (no file edits proposed)"
+                    } else {
+                        "${changes.size} proposed change(s) await your approval"
+                    }
                 },
                 generationActive = false,
                 rawResponse = response,

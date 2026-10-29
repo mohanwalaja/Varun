@@ -271,7 +271,9 @@ class GitHubGitOps(private val client: GitHubClient) {
                         branch = branch,
                         commitSha = commitSha,
                         filesChanged = 1,
-                        htmlUrl = r.value.optJSONObject("commit")?.optString("html_url").ifBlank { null },
+                        htmlUrl = r.value.optJSONObject("commit")
+                            ?.optString("html_url")
+                            ?.takeIf { it.isNotBlank() },
                     ),
                 )
             }

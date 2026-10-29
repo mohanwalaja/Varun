@@ -236,16 +236,25 @@ class EditJournal(private val workspaceRoot: File) {
      */
     fun recordRejection(proposal: Proposal, reason: String = "Rejected by user"): Entry {
         val decision = PathGuard.resolve(workspaceRoot, proposal.relativePath)
+        // A Denied decision deliberately carries no resolved path - refusing to
+        // produce one is the entire point of the guard. Journal the path that
+        // was asked for instead: it is stored as inert text in the audit trail
+        // and is never used to open a file.
         val relative = when (decision) {
             is PathGuard.Decision.Allowed -> decision.relativePath
-            is PathGuard.Decision.Denied -> decision.relativePath
+            is PathGuard.Decision.Denied -> proposal.relativePath
+        }
+        val noteText = when (decision) {
+            is PathGuard.Decision.Denied ->
+                "$reason - refused by PathGuard (${decision.reason}: ${decision.detail})"
+            is PathGuard.Decision.Allowed -> reason
         }
         val entry = Entry(
             id = nextId(),
             kind = EntryKind.REJECTED,
             relativePath = relative,
             backupPath = null,
-            note = reason,
+            note = noteText,
             timestamp = System.currentTimeMillis(),
             sha256 = null,
             bytes = 0,

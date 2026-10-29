@@ -315,7 +315,7 @@ fun ChatScreen(
         // --------------------------------------------------------- status bar
         Row(
             Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 4.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
                 if (ui.generating) stringResource(R.string.chat_generating)

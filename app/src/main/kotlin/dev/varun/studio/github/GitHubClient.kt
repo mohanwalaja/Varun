@@ -137,7 +137,7 @@ class GitHubClient(
         parse: (String) -> T,
     ): ApiResult<T> = withContext(Dispatchers.IO) {
         val t = token()
-        if (t == null && !path.startsWith(PUBLIC_OK_PREFIXES)) {
+        if (t == null && PUBLIC_OK_PREFIXES.none { path.startsWith(it) }) {
             return@withContext ApiResult.Err(GitHubError.NoCredentials())
         }
         val url = if (path.startsWith("http")) path else "$API_BASE$path"

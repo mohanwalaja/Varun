@@ -40,10 +40,14 @@ data class ChatMessageRecord(
     val role: String,             // "user" | "assistant" | "system"
     val content: String,
     val createdAt: Long,
-    val promptTokens: Int?,
-    val completionTokens: Int?,
-    val elapsedMs: Long?,
-    val resultCode: String?,
+    // Inference statistics. Only an assistant message produced by a real
+    // generation carries these; records built purely to project existing chat
+    // history back into a prompt have none, so they default to null. Every
+    // persistence path still passes explicit values.
+    val promptTokens: Int? = null,
+    val completionTokens: Int? = null,
+    val elapsedMs: Long? = null,
+    val resultCode: String? = null,
 )
 
 data class TaskRecord(

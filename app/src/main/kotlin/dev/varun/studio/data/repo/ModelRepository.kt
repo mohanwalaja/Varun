@@ -13,6 +13,7 @@ import dev.varun.studio.data.db.VarunDatabase
 import dev.varun.studio.workspace.Digests
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -216,7 +217,12 @@ class ModelRepository(
                             while (true) {
                                 // Cooperative cancellation: the coroutine job is
                                 // checked between chunks so Stop works promptly.
-                                kotlinx.coroutines.ensureActive()
+                                // ensureActive is an extension on CoroutineScope,
+                                // which is the implicit receiver of the enclosing
+                                // withContext block (the .use lambdas are inline,
+                                // so it propagates). Extension functions cannot be
+                                // called through a fully-qualified package name.
+                                ensureActive()
                                 val n = input.read(buf)
                                 if (n <= 0) break
                                 out.write(buf, 0, n)

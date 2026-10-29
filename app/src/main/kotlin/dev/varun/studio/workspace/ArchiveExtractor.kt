@@ -7,6 +7,14 @@ import java.util.zip.GZIPInputStream
 import java.util.zip.ZipInputStream
 
 /**
+ * Progress callback: (entriesDone, currentEntryName).
+ *
+ * Declared at file top level because Kotlin does not support nested or local
+ * type aliases - it cannot live inside `object ArchiveExtractor`.
+ */
+typealias ArchiveProgress = (Int, String) -> Unit
+
+/**
  * Extracts repository archives into a workspace.
  *
  * GitHub's tarball endpoint returns `.tar.gz`, and users may also import a
@@ -36,10 +44,7 @@ object ArchiveExtractor {
         data class Failure(val message: String) : ExtractResult
     }
 
-    /** Progress callback: (entriesDone, currentEntryName). */
-    typealias Progress = (Int, String) -> Unit
-
-    fun extract(archive: File, destination: File, options: Options = Options(), progress: Progress? = null): ExtractResult {
+    fun extract(archive: File, destination: File, options: Options = Options(), progress: ArchiveProgress? = null): ExtractResult {
         if (!archive.exists() || !archive.isFile) {
             return ExtractResult.Failure("Archive not found: ${archive.name}")
         }
@@ -64,7 +69,7 @@ object ArchiveExtractor {
 
     // ------------------------------------------------------------------ ZIP
 
-    private fun extractZip(archive: File, dest: File, options: Options, progress: Progress?): ExtractResult {
+    private fun extractZip(archive: File, dest: File, options: Options, progress: ArchiveProgress?): ExtractResult {
         dest.mkdirs()
         var written = 0
         var bytes = 0L
@@ -112,7 +117,7 @@ object ArchiveExtractor {
 
     // ------------------------------------------------------------------ TAR
 
-    private fun extractTar(input: java.io.InputStream, dest: File, options: Options, progress: Progress?): ExtractResult {
+    private fun extractTar(input: java.io.InputStream, dest: File, options: Options, progress: ArchiveProgress?): ExtractResult {
         dest.mkdirs()
         var written = 0
         var bytes = 0L

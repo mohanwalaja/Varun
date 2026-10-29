@@ -1,8 +1,8 @@
 package dev.varun.studio.ui.theme
 
 import android.content.Context
+import android.app.LocaleManager
 import android.os.Build
-import android.os.LocaleManager
 import android.os.LocaleList
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme

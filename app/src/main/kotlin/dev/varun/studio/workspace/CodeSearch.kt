@@ -132,7 +132,11 @@ object CodeSearch {
                     continue
                 }
                 if (child.length() > options.maxFileBytes) { skipped++; continue }
-                val relative = PathGuard.relativize(root, child) ?: run { skipped++; continue }
+                // Not `?: run { skipped++; continue }` - a `continue` inside an
+                // inline lambda is an experimental Kotlin feature that is not
+                // enabled in this build.
+                val relative = PathGuard.relativize(root, child)
+                if (relative == null) { skipped++; continue }
                 if (!isProbablyText(child)) { skipped++; continue }
                 scanned++
                 val text = runCatching { child.readText(Charsets.UTF_8) }.getOrNull()
