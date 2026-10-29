@@ -1,50 +1,154 @@
 ===== gradle-assemble.log : compiler / gradle diagnostics =====
-56:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/MainActivity.kt:57:13 Unresolved reference 'maybeRequestNotificationPermission'.
-57:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/MainActivity.kt:98:5 'onRequestPermissionsResult' overrides nothing.
-58:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/MainActivity.kt:103:55 Argument type mismatch: actual type is 'kotlin.Array<CapturedType(out kotlin.String)>', but 'kotlin.Array<kotlin.String>' was expected.
-59:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/agent/CodingAgent.kt:321:27 Argument type mismatch: actual type is 'kotlin.Any', but 'kotlin.String' was expected.
-60:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/agent/CodingAgent.kt:327:21 'else' entry must be the last one in a 'when' expression.
-61:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/agent/CodingAgent.kt:328:82 Syntax error: Expecting a when-condition.
-62:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/agent/CodingAgent.kt:329:17 Syntax error: Expecting an expression, is-condition or in-condition.
-63:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/data/repo/ModelRepository.kt:219:52 Unresolved reference 'ensureActive'.
-64:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/github/GitHubClient.kt:140:26 Unresolved reference 'not' for operator '!'.
-65:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/github/GitHubClient.kt:140:32 None of the following candidates is applicable:
-69:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/github/GitHubGitOps.kt:274:89 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'kotlin.String?'.
-70:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/ChatScreen.kt:318:13 No parameter with name 'verticalArrangement' found.
-71:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/ChatScreen.kt:320:13 @Composable invocations can only happen from the context of a @Composable function
-72:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/ChatScreen.kt:321:36 @Composable invocations can only happen from the context of a @Composable function
-73:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/ChatScreen.kt:322:22 @Composable invocations can only happen from the context of a @Composable function
-74:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/ChatScreen.kt:327:39 @Composable invocations can only happen from the context of a @Composable function
-75:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/ChatScreen.kt:328:39 @Composable invocations can only happen from the context of a @Composable function
-76:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/ChatScreen.kt:331:17 @Composable invocations can only happen from the context of a @Composable function
-77:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/ChatScreen.kt:332:21 @Composable invocations can only happen from the context of a @Composable function
-78:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/ChatScreen.kt:333:43 @Composable invocations can only happen from the context of a @Composable function
-79:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/ChatScreen.kt:334:43 @Composable invocations can only happen from the context of a @Composable function
-80:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/theme/Theme.kt:5:19 Unresolved reference 'LocaleManager'.
-81:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/theme/Theme.kt:179:43 Unresolved reference 'LocaleManager'.
-82:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/theme/Theme.kt:179:43 Argument type mismatch: actual type is 'java.lang.Class<T>', but 'kotlin.String' was expected.
-83:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/theme/Theme.kt:179:64 Cannot infer type for this parameter. Please specify it explicitly.
-84:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/theme/Theme.kt:179:64 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
-86:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/theme/Theme.kt:180:12 Unresolved reference 'applicationLocales'.
-87:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/vm/ChatViewModel.kt:192:109 No value passed for parameter 'promptTokens'.
-88:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/vm/ChatViewModel.kt:192:109 No value passed for parameter 'completionTokens'.
-89:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/vm/ChatViewModel.kt:192:109 No value passed for parameter 'elapsedMs'.
-90:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/vm/ChatViewModel.kt:192:109 No value passed for parameter 'resultCode'.
-91:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/vm/ChatViewModel.kt:236:100 No value passed for parameter 'promptTokens'.
-92:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/vm/ChatViewModel.kt:236:100 No value passed for parameter 'completionTokens'.
-93:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/vm/ChatViewModel.kt:236:100 No value passed for parameter 'elapsedMs'.
-94:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/vm/ChatViewModel.kt:236:100 No value passed for parameter 'resultCode'.
-95:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/workspace/ArchiveExtractor.kt:40:5 Nested and local type aliases are not supported.
-96:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/workspace/CodeSearch.kt:135:86 The feature "break continue in inline lambdas" is experimental and should be enabled explicitly
-97:e: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/workspace/EditJournal.kt:241:54 Unresolved reference 'relativePath'.
-99:> Task :app:compileDebugKotlin FAILED
-101:FAILURE: Build failed with an exception.
-103:* What went wrong:
-104:Execution failed for task ':app:compileDebugKotlin'.
-108:* Try:
-175:Caused by: org.gradle.workers.internal.DefaultWorkerExecutor$WorkExecutionException: A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
-333:Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilation error. See log for more details
 ----- gradle-assemble.log : last 150 lines -----
+Downloading https://services.gradle.org/distributions/gradle-8.9-bin.zip
+............10%.............20%.............30%.............40%.............50%.............60%.............70%.............80%.............90%.............100%
+
+Welcome to Gradle 8.9!
+
+Here are the highlights of this release:
+ - Enhanced Error and Warning Messages
+ - IDE Integration Improvements
+ - Daemon JVM Information
+
+For more details see https://docs.gradle.org/8.9/release-notes.html
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.9/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateDebugBuildConfig
+> Task :app:generateDebugResValues
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:mergeDebugResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :app:parseDebugLocalResources
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:javaPreCompileDebug
+> Task :app:processDebugManifestForPackage
+> Task :app:mergeDebugShaders
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:compressDebugAssets
+> Task :app:desugarDebugFileDependencies
+> Task :app:processDebugResources
+> Task :app:checkDebugDuplicateClasses
+> Task :app:compileDebugKotlin
+w: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/MainActivity.kt:98:18 This declaration overrides a deprecated member but is not marked as deprecated itself. Please add the '@Deprecated' annotation or suppress the diagnostic.
+w: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/MainActivity.kt:106:15 'fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray): Unit' is deprecated. This method has been deprecated in favor of using the Activity Result API
+      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt
+      contracts for common intents available in
+      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for
+      testing, and allow receiving results in separate, testable classes independent from your
+      activity. Use
+      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)} passing
+      in a {@link RequestMultiplePermissions} object for the {@link ActivityResultContract} and
+      handling the result in the {@link ActivityResultCallback#onActivityResult(Object) callback}.
+w: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/MainActivity.kt:123:22 'static field TRIM_MEMORY_RUNNING_CRITICAL: Int' is deprecated. Deprecated in Java.
+w: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/NavGraph.kt:61:44 'val Icons.Filled.Chat: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Chat.
+w: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/ReposScreen.kt:452:82 'val Icons.Filled.InsertDriveFile: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.InsertDriveFile.
+w: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/WorkspaceScreen.kt:215:85 'val Icons.Filled.InsertDriveFile: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.InsertDriveFile.
+w: file:///home/runner/work/Varun/Varun/app/src/main/kotlin/dev/varun/studio/ui/screens/WorkspaceScreen.kt:449:38 'val Icons.Filled.InsertDriveFile: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.InsertDriveFile.
+
+> Task :app:configureCMakeDebug[arm64-v8a]
+C/C++: CMAKE_BUILD_TYPE=Debug
+
+> Task :app:compileDebugJavaWithJavac
+> Task :app:dexBuilderDebug
+> Task :app:mergeDebugGlobalSynthetics
+> Task :app:processDebugJavaRes
+> Task :app:mergeLibDexDebug
+> Task :app:mergeProjectDexDebug
+> Task :app:mergeDebugJavaResource
+> Task :app:mergeExtDexDebug
+> Task :app:buildCMakeDebug[arm64-v8a]
+> Task :app:mergeDebugJniLibFolders
+> Task :app:mergeDebugNativeLibs
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
+> Task :app:stripDebugDebugSymbols
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect
+> Task :app:assembleDebug
+
+BUILD SUCCESSFUL in 4m 13s
+39 actionable tasks: 39 executed
+===== gradle-test.log : compiler / gradle diagnostics =====
+60:> Task :app:testDebugUnitTest FAILED
+62:FAILURE: Build failed with an exception.
+64:* What went wrong:
+65:Execution failed for task ':app:testDebugUnitTest'.
+68:* Try:
+104:Caused by: org.gradle.api.internal.exceptions.MarkedVerificationException: There were failing tests. See the report at: file:///home/runner/work/Varun/Varun/app/build/reports/tests/testDebugUnitTest/index.html
+----- gradle-test.log : last 150 lines -----
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
+Caused by: org.gradle.api.internal.exceptions.MarkedVerificationException: There were failing tests. See the report at: file:///home/runner/work/Varun/Varun/app/build/reports/tests/testDebugUnitTest/index.html
+	at org.gradle.api.tasks.testing.AbstractTestTask.handleTestFailures(AbstractTestTask.java:705)
+	at org.gradle.api.tasks.testing.AbstractTestTask.handleCollectedResults(AbstractTestTask.java:539)
+	at org.gradle.api.tasks.testing.AbstractTestTask.executeTests(AbstractTestTask.java:534)
+	at org.gradle.api.tasks.testing.Test.executeTests(Test.java:715)
+	at com.android.build.gradle.tasks.factory.AndroidUnitTest.executeTests(AndroidUnitTest.java:171)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at org.gradle.internal.reflect.JavaMethod.invoke(JavaMethod.java:125)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.doExecute(StandardTaskAction.java:58)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:51)
+	at org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(StandardTaskAction.java:29)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$3.run(TaskExecution.java:244)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeAction(TaskExecution.java:229)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeActions(TaskExecution.java:212)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.executeWithPreviousOutputFiles(TaskExecution.java:195)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.execute(TaskExecution.java:162)
+	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:105)
+	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:59)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:56)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:209)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:56)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:42)
+	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:75)
+	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:50)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:28)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:67)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:37)
 	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:61)
 	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:26)
 	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:69)
@@ -129,69 +233,9 @@
 	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
 	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:459)
 	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:376)
-	at org.gradle.execution.plan.DefaultPlanExecutor.process(DefaultPlanExecutor.java:111)
-	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.executeWithServices(DefaultTaskExecutionGraph.java:138)
-	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.execute(DefaultTaskExecutionGraph.java:123)
-	at org.gradle.execution.SelectedTaskExecutionAction.execute(SelectedTaskExecutionAction.java:35)
-	at org.gradle.execution.DryRunBuildExecutionAction.execute(DryRunBuildExecutionAction.java:51)
-	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:54)
-	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:43)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:209)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
-	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor.execute(BuildOperationFiringBuildWorkerExecutor.java:40)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.lambda$executeTasks$10(DefaultBuildLifecycleController.java:313)
-	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
-	at org.gradle.internal.model.StateTransitionController.lambda$tryTransition$8(StateTransitionController.java:177)
-	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:44)
-	at org.gradle.internal.model.StateTransitionController.tryTransition(StateTransitionController.java:177)
-	at org.gradle.internal.build.DefaultBuildLifecycleController.executeTasks(DefaultBuildLifecycleController.java:304)
-	at org.gradle.internal.build.DefaultBuildWorkGraphController$DefaultBuildWorkGraph.runWork(DefaultBuildWorkGraphController.java:220)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:267)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:131)
-	at org.gradle.composite.internal.DefaultBuildController.doRun(DefaultBuildController.java:181)
-	at org.gradle.composite.internal.DefaultBuildController.access$000(DefaultBuildController.java:50)
-	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.lambda$run$0(DefaultBuildController.java:198)
-	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:85)
-	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.run(DefaultBuildController.java:198)
 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
-Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilation error. See log for more details
-	at org.jetbrains.kotlin.gradle.tasks.TasksUtilsKt.throwExceptionIfCompilationFailed(tasksUtils.kt:21)
-	at org.jetbrains.kotlin.compilerRunner.GradleKotlinCompilerWork.run(GradleKotlinCompilerWork.kt:119)
-	at org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction.execute(GradleCompilerRunnerWithWorkers.kt:76)
-	at org.gradle.workers.internal.DefaultWorkerServer.execute(DefaultWorkerServer.java:63)
-	at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:66)
-	at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:62)
-	at org.gradle.internal.classloader.ClassLoaderUtils.executeInClassloader(ClassLoaderUtils.java:100)
-	at org.gradle.workers.internal.NoIsolationWorkerFactory$1.lambda$execute$0(NoIsolationWorkerFactory.java:62)
-	at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:44)
-	at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:41)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:209)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
-	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
-	at org.gradle.workers.internal.AbstractWorker.executeWrappedInBuildOperation(AbstractWorker.java:41)
-	at org.gradle.workers.internal.NoIsolationWorkerFactory$1.execute(NoIsolationWorkerFactory.java:59)
-	at org.gradle.workers.internal.DefaultWorkerExecutor.lambda$submitWork$0(DefaultWorkerExecutor.java:174)
-	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runExecution(DefaultConditionalExecutionQueue.java:195)
-	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.access$700(DefaultConditionalExecutionQueue.java:128)
-	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner$1.run(DefaultConditionalExecutionQueue.java:170)
-	at org.gradle.internal.Factories$1.create(Factories.java:31)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:267)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:131)
-	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:136)
-	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runBatch(DefaultConditionalExecutionQueue.java:165)
-	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.run(DefaultConditionalExecutionQueue.java:134)
-	... 2 more
 
 
-BUILD FAILED in 4m 13s
-31 actionable tasks: 31 executed
+BUILD FAILED in 24s
+24 actionable tasks: 5 executed, 1 from cache, 18 up-to-date
